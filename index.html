@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>HOI5 Remastered — Глобальная Стратегия</title>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body oncontextmenu="return false;">
+
+<div id="main-menu">
+    <div class="hq-folder" id="menu-home">
+        <h1>HEARTS OF IRON V<br><span class="subtitle-main">REMASTERED</span></h1>
+        <p class="subtitle">Grand Strategy Command</p>
+        <button id="btn-play" class="hq-button">🗺️ НАЧАТЬ ИГРУ</button>
+        <p class="version-text">Oberkommando — Simulation Module v2.0</p>
+    </div>
+</div>
+
+<div id="country-select" class="fullscreen-overlay hidden">
+    <div class="select-card">
+        <h2>ВЫБЕРИТЕ ДЕРЖАВУ</h2>
+        <div id="country-list"></div>
+        <button id="btn-cancel" class="cancel-btn">НАЗАД</button>
+    </div>
+</div>
+
+<div id="game-container" class="hidden">
+    <div id="top-bar">
+        <span id="country-name" class="country-name">—</span>
+        <span class="separator">|</span>
+        <span class="stat-item">👥 <span id="val-manpower">0</span></span>
+        <span class="stat-item">🏭 <span id="val-factories">0</span></span>
+        <span class="stat-item">🔫 <span id="val-equipment">0</span></span>
+        <span id="research-indicator" class="hidden indicator indicator-blue">🔬</span>
+        <span id="focus-indicator" class="hidden indicator indicator-yellow">⭐</span>
+        <span id="build-indicator" class="hidden indicator indicator-green">🏗️</span>
+        <span id="recruit-hint" class="hidden indicator indicator-yellow">🎯 ВЫБЕРИТЕ ПРОВИНЦИЮ</span>
+        <span id="order-hint" class="hidden indicator indicator-green">🚶 ВЫБЕРИТЕ ЦЕЛЬ</span>
+        <span id="build-hint" class="hidden indicator indicator-blue">📍 ВЫБЕРИТЕ МЕСТО</span>
+        <div class="speed-controls">
+            <button class="speed-btn active" data-speed="0">⏸</button>
+            <button class="speed-btn" data-speed="1">▶ 1x</button>
+            <button class="speed-btn" data-speed="3">▶▶ 3x</button>
+            <button class="speed-btn" data-speed="5">▶▶▶ 5x</button>
+        </div>
+        <span id="game-date" class="date-display">1 ЯНВ 1936</span>
+    </div>
+
+    <div id="game-tabs" class="hidden">
+        <button class="tab-btn" data-tab="army">🎖️ АРМИЯ</button>
+        <button class="tab-btn" data-tab="research">🔬 ТЕХНОЛОГИИ</button>
+        <button class="tab-btn" data-tab="focus">⭐ ФОКУСЫ</button>
+        <button class="tab-btn" data-tab="diplomacy">🤝 ДИПЛОМАТИЯ</button>
+        <button class="tab-btn" data-tab="build">🏗️ СТРОЙКА</button>
+        <button class="tab-btn" data-tab="save">💾 СОХРАНИТЬ</button>
+    </div>
+
+    <div id="info-window" class="hidden">
+        <div class="window-header">
+            <span id="window-title">ОКНО</span>
+            <button id="close-window" class="close-btn">✖</button>
+        </div>
+        <div id="window-content"></div>
+    </div>
+
+    <canvas id="map-canvas"></canvas>
+
+    <div id="info-sidebar" class="hidden">
+        <div class="sidebar-header">
+            <h3 id="sidebar-title">—</h3>
+            <button id="close-sidebar" class="close-btn">✖</button>
+        </div>
+        <div class="sidebar-content">
+            <div class="sidebar-row"><span class="sidebar-label">👑 Лидер:</span><span id="sidebar-leader" class="sidebar-value">—</span></div>
+            <div class="sidebar-row"><span class="sidebar-label">⚡ Идеология:</span><span id="sidebar-ideology" class="sidebar-value">—</span></div>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-row"><span class="sidebar-label">👥 Население:</span><span id="sidebar-pop" class="sidebar-value value-green">—</span></div>
+            <div class="sidebar-row"><span class="sidebar-label">🏭 Заводы:</span><span id="sidebar-factories" class="sidebar-value value-blue">—</span></div>
+            <div class="sidebar-row"><span class="sidebar-label">🏗️ Постройки:</span><span id="sidebar-buildings" class="sidebar-value">—</span></div>
+            <div class="sidebar-divider"></div>
+            <div id="sidebar-actions" class="hidden"></div>
+        </div>
+    </div>
+
+    <div id="hint" class="hidden">💡 <span id="hint-text"></span></div>
+    <div id="notifications"></div>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,1072 @@
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
+
+:root {
+    --bg-dark: #0a0a0a;
+    --panel-bg: #1f2937;
+    --gold: #eab308;
+    --war-red: #ef4444;
+    --ally-green: #15803d;
+    --army-green: #4b5320;
+    --sea-blue: #1b3a4b;
+    --paper: #e3d1b5;
+    --border-color: #4b5563;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Special Elite', 'Courier New', monospace;
+    background: var(--bg-dark);
+    color: white;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ========== ГЛАВНОЕ МЕНЮ ========== */
+#main-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.95) 100%),
+                url('../assets/hoi5-backend.png') center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hq-folder {
+    background: rgba(227, 209, 181, 0.95);
+    color: #1a1a1a;
+    padding: 3rem;
+    border-radius: 4px;
+    box-shadow: 0 0 50px rgba(0,0,0,0.9);
+    width: 550px;
+    max-width: 90vw;
+    text-align: center;
+    border: 2px solid #8b4513;
+}
+
+.hq-folder h1 {
+    font-size: clamp(28px, 8vw, 48px);
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    margin-bottom: 0.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 4px solid rgba(0,0,0,0.3);
+    text-transform: uppercase;
+}
+
+.subtitle-main {
+    font-size: 0.5em;
+    letter-spacing: 0.3em;
+    color: #4b5320;
+}
+
+.subtitle {
+    font-size: 14px;
+    opacity: 0.7;
+    margin-bottom: 2rem;
+    font-style: italic;
+}
+
+.hq-button {
+    display: block;
+    width: 100%;
+    background: #2e2e2e;
+    color: #eee;
+    padding: 16px;
+    font-size: 18px;
+    font-weight: bold;
+    border: 2px solid #111;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    transition: all 0.2s;
+    font-family: inherit;
+    box-shadow: 4px 4px 0px #000;
+}
+
+.hq-button:hover {
+    background: var(--army-green);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px #000;
+}
+
+.version-text {
+    font-size: 10px;
+    opacity: 0.5;
+    margin-top: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* ========== ВЫБОР СТРАНЫ ========== */
+#country-select {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle, rgba(0,0,0,0.4), rgba(0,0,0,0.9)),
+                url('../assets/uploading-screan.png') center/cover;
+}
+
+.select-card {
+    background: rgba(227, 209, 181, 0.92);
+    color: #1a1a1a;
+    padding: 2rem;
+    border-radius: 8px;
+    border: 4px solid #854d0e;
+    width: 450px;
+    max-width: 90vw;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.select-card h2 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+#country-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+#country-list button {
+    width: 100%;
+    text-align: left;
+    padding: 10px 12px;
+    border: 1px solid #9ca3af;
+    border-radius: 6px;
+    font-weight: bold;
+    font-family: 'Special Elite', 'Courier New', monospace;
+    font-size: 13px;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.5);
+    transition: all 0.2s;
+}
+
+#country-list button:hover {
+    background: white;
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.cancel-btn {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 12px;
+    background: #991b1b;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Special Elite', 'Courier New', monospace;
+    font-size: 14px;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.cancel-btn:hover {
+    background: #7f1d1d;
+}
+
+/* ========== ИГРОВОЙ КОНТЕЙНЕР ========== */
+#game-container {
+    position: fixed;
+    inset: 0;
+    background: #1a1c1e;
+}
+
+/* ========== ВЕРХНЯЯ ПАНЕЛЬ ========== */
+#top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 44px;
+    background: rgba(17, 24, 39, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 12px;
+    z-index: 100;
+    font-size: 12px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+
+.country-name {
+    font-weight: bold;
+    color: var(--gold);
+    font-size: 15px;
+    min-width: 100px;
+    white-space: nowrap;
+}
+
+.separator {
+    color: #6b7280;
+}
+
+.stat-item {
+    white-space: nowrap;
+}
+
+.indicator {
+    font-size: 10px;
+    white-space: nowrap;
+    padding: 2px 8px;
+    border-radius: 4px;
+    animation: pulse 1.5s infinite;
+}
+
+.indicator-blue {
+    color: #60a5fa;
+}
+
+.indicator-yellow {
+    color: #fbbf24;
+}
+
+.indicator-green {
+    color: #4ade80;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.speed-controls {
+    display: flex;
+    gap: 4px;
+    background: rgba(0,0,0,0.3);
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.speed-btn {
+    background: #374151;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 10px;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.speed-btn:hover {
+    background: #4b5563;
+}
+
+.speed-btn.active {
+    background: var(--gold);
+    color: black;
+    font-weight: bold;
+}
+
+.date-display {
+    background: rgba(0,0,0,0.5);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-family: monospace;
+    min-width: 110px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+/* ========== ВКЛАДКИ ========== */
+#game-tabs {
+    position: fixed;
+    top: 48px;
+    left: 16px;
+    display: flex;
+    gap: 2px;
+    z-index: 100;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    background: #1f2937;
+    color: #d1d5db;
+    border: 1px solid var(--border-color);
+    padding: 6px 12px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 6px 6px 0 0;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.tab-btn:hover {
+    background: #374151;
+    color: white;
+}
+
+.tab-btn.active {
+    background: #854d0e;
+    border-color: var(--gold);
+    color: white;
+}
+
+/* ========== ОКНО ИНФОРМАЦИИ ========== */
+#info-window {
+    position: fixed;
+    top: 100px;
+    left: 16px;
+    width: 560px;
+    max-width: calc(100vw - 32px);
+    background: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    z-index: 200;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+
+.window-header {
+    background: #111827;
+    padding: 12px 16px;
+    border-bottom: 1px solid #374151;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#window-title {
+    font-weight: bold;
+    color: var(--gold);
+    font-size: 14px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: var(--war-red);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: color 0.2s;
+}
+
+.close-btn:hover {
+    color: #dc2626;
+}
+
+#window-content {
+    padding: 16px;
+    max-height: 65vh;
+    overflow-y: auto;
+}
+
+/* ========== КАНВАС ========== */
+#map-canvas {
+    position: fixed;
+    inset: 0;
+    background: var(--sea-blue);
+    cursor: crosshair;
+    z-index: 1;
+    touch-action: none;
+}
+
+/* ========== БОКОВАЯ ПАНЕЛЬ ========== */
+#info-sidebar {
+    position: fixed;
+    top: 100px;
+    right: 16px;
+    width: 300px;
+    max-width: calc(100vw - 32px);
+    background: rgba(31, 41, 55, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px;
+    z-index: 150;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+#sidebar-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--gold);
+}
+
+.sidebar-content {
+    font-size: 13px;
+}
+
+.sidebar-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.sidebar-label {
+    font-size: 11px;
+    color: #9ca3af;
+}
+
+.sidebar-value {
+    font-size: 12px;
+    color: #e5e5e5;
+    font-weight: bold;
+}
+
+.value-green {
+    color: #4ade80;
+}
+
+.value-blue {
+    color: #60a5fa;
+}
+
+.sidebar-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.1);
+    margin: 8px 0;
+}
+
+#sidebar-actions {
+    margin-top: 8px;
+}
+
+#sidebar-actions button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 12px;
+    margin-bottom: 6px;
+    transition: all 0.2s;
+    text-transform: uppercase;
+}
+
+/* ========== ПОДСКАЗКА ========== */
+#hint {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.9);
+    padding: 8px 16px;
+    border-radius: 999px;
+    color: var(--gold);
+    font-size: 12px;
+    z-index: 300;
+    border: 1px solid rgba(234, 179, 8, 0.5);
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+/* ========== УВЕДОМЛЕНИЯ ========== */
+#notifications {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    width: 320px;
+    max-width: calc(100vw - 32px);
+    z-index: 400;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: none;
+}
+
+#notifications > div {
+    pointer-events: auto;
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 4px solid;
+    animation: slideIn 0.3s ease-out;
+    font-size: 12px;
+}
+
+.notif-war {
+    background: rgba(185, 28, 28, 0.9);
+    border-color: white;
+    color: white;
+}
+
+.notif-info {
+    background: rgba(27, 58, 75, 0.9);
+    border-color: var(--gold);
+    color: white;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ========== КАРТОЧКИ (ОБЩИЕ) ========== */
+.unit-card {
+    background: #374151;
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 4px solid var(--gold);
+    margin-bottom: 8px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: #4b5563;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 4px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 3px;
+    transition: width 0.3s;
+}
+
+.progress-fill-blue {
+    height: 100%;
+    background: #3b82f6;
+    border-radius: 3px;
+    transition: width 0.3s;
+}
+
+/* ========== РЕСУРСЫ ========== */
+.resources-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.resource-card {
+    background: #374151;
+    padding: 12px 8px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.resource-icon {
+    font-size: 24px;
+    margin-bottom: 4px;
+}
+
+.resource-value {
+    font-size: 18px;
+    font-weight: bold;
+    color: #eab308;
+}
+
+.resource-label {
+    font-size: 9px;
+    color: #9ca3af;
+    text-transform: uppercase;
+    margin-top: 4px;
+}
+
+/* ========== СЕКЦИИ ========== */
+.section {
+    margin-top: 16px;
+}
+
+.section-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #eab308;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #374151;
+    text-transform: uppercase;
+}
+
+/* ========== КАРТОЧКА НАЙМА ========== */
+.recruit-card {
+    background: #374151;
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 4px solid #eab308;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.recruit-info {
+    flex: 1;
+}
+
+.recruit-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.recruit-icon {
+    font-size: 24px;
+}
+
+.recruit-name {
+    font-weight: bold;
+    color: white;
+}
+
+.recruit-stats {
+    display: flex;
+    gap: 12px;
+    font-size: 11px;
+    color: #d1d5db;
+    margin-top: 4px;
+    flex-wrap: wrap;
+}
+
+.recruit-cost {
+    display: flex;
+    gap: 12px;
+    font-size: 10px;
+    color: #9ca3af;
+    margin-top: 4px;
+}
+
+.btn-recruit {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.btn-active {
+    background: #15803d;
+    color: white;
+}
+
+.btn-active:hover {
+    background: #16a34a;
+}
+
+.btn-disabled {
+    background: #4b5563;
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+
+/* ========== КАРТОЧКА ЮНИТА ========== */
+.unit-card-item {
+    background: #374151;
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 4px solid #3b82f6;
+}
+
+.unit-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.unit-card-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.unit-icon {
+    font-size: 24px;
+}
+
+.unit-name {
+    font-weight: bold;
+    color: white;
+    font-size: 14px;
+}
+
+.unit-status {
+    font-size: 10px;
+}
+
+.btn-select {
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    background: #2563eb;
+    color: white;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.btn-select:hover {
+    background: #3b82f6;
+}
+
+.unit-hp-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.hp-bar-bg {
+    flex: 1;
+    height: 6px;
+    background: #4b5563;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.hp-bar-fill {
+    height: 100%;
+    background: #22c55e;
+    border-radius: 3px;
+    transition: width 0.3s;
+}
+
+.hp-text {
+    font-size: 10px;
+    color: #9ca3af;
+    min-width: 60px;
+    text-align: right;
+}
+
+/* ========== СТРОИТЕЛЬСТВО ========== */
+.resource-bar {
+    background: #374151;
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
+
+.construction-active {
+    background: rgba(30, 58, 138, 0.3);
+    border: 1px solid #3b82f6;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.construction-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+.construction-days {
+    color: #93c5fd;
+}
+
+.build-card {
+    background: #374151;
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 4px solid #3b82f6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.build-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.build-icon {
+    font-size: 28px;
+}
+
+.build-name {
+    font-weight: bold;
+    color: white;
+    font-size: 14px;
+}
+
+.build-cost {
+    font-size: 11px;
+    color: #9ca3af;
+    margin-top: 2px;
+}
+
+.btn-build {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+/* ========== ДИПЛОМАТИЯ ========== */
+.diplo-section {
+    background: #1f2937;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.diplo-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #374151;
+}
+
+.diplo-allies {
+    color: #4ade80;
+}
+
+.diplo-enemies {
+    color: #f87171;
+}
+
+.diplo-empty {
+    text-align: center;
+    color: #6b7280;
+    padding: 16px;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.diplo-card {
+    background: #374151;
+    padding: 12px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.enemy-card {
+    border-left: 4px solid #ef4444;
+}
+
+.diplo-country {
+    font-weight: bold;
+    color: white;
+}
+
+.diplo-ideology {
+    font-size: 10px;
+    color: #9ca3af;
+    margin-top: 2px;
+}
+
+.diplo-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.diplo-status-war {
+    color: #f87171;
+    font-size: 11px;
+    font-weight: bold;
+    animation: pulse 1.5s infinite;
+}
+
+.btn-small {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.btn-red {
+    background: #991b1b;
+    color: white;
+}
+
+.btn-red:hover {
+    background: #b91c1c;
+}
+
+.btn-gray {
+    background: #4b5563;
+    color: white;
+}
+
+.btn-gray:hover {
+    background: #6b7280;
+}
+
+/* ========== СКРОЛЛ ========== */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1f2937;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #6b7280;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}
+
+/* ========== МОБИЛЬНАЯ АДАПТАЦИЯ ========== */
+@media (max-width: 768px) {
+    .hq-folder {
+        padding: 1.5rem;
+    }
+    
+    #top-bar {
+        height: auto;
+        min-height: 44px;
+        padding: 4px 8px;
+        gap: 6px;
+        font-size: 10px;
+    }
+    
+    .separator {
+        display: none;
+    }
+    
+    .speed-btn {
+        padding: 3px 6px;
+        font-size: 9px;
+    }
+    
+    .date-display {
+        font-size: 9px;
+        min-width: 90px;
+    }
+    
+    #game-tabs {
+        left: 8px;
+        right: 8px;
+        top: auto;
+        top: 48px;
+    }
+    
+    .tab-btn {
+        flex: 1;
+        text-align: center;
+        padding: 6px 8px;
+        font-size: 8px;
+    }
+    
+    #info-window,
+    #info-sidebar {
+        left: 8px;
+        right: 8px;
+        width: auto;
+        top: 90px;
+    }
+    
+    .select-card {
+        width: 90vw;
+        padding: 1rem;
+    }
+    
+    .resources-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+    }
+    
+    .recruit-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .btn-recruit {
+        text-align: center;
+        margin-top: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .country-name {
+        font-size: 12px;
+        min-width: 60px;
+    }
+    
+    #country-list button {
+        font-size: 10px;
+        padding: 8px;
+    }
+    /* ========== ЭКРАН ЗАГРУЗКИ ========== */
+#loading-screen {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+#loading-bar-fill {
+    transition: width 0.3s ease;
+    box-shadow: 0 0 10px rgba(234, 179, 8, 0.5);
+}
+}
