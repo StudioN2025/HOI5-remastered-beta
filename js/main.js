@@ -188,23 +188,17 @@ function startGame(countryId) {
 }
 
 // ========== ИГРОВОЙ ЦИКЛ ==========
+// main.js — замени startGameLoop на эту:
+
 function startGameLoop() {
     let lastTick = performance.now();
     let autoSaveCounter = 0;
-    let wasPaused = false;
     
     function loop(timestamp) {
         const speed = getGameSpeed();
         
         if (speed === 0) {
-            wasPaused = true;
-            gameLoopId = requestAnimationFrame(loop);
-            return;
-        }
-        
-        if (wasPaused) {
             lastTick = timestamp;
-            wasPaused = false;
             gameLoopId = requestAnimationFrame(loop);
             return;
         }
@@ -212,40 +206,45 @@ function startGameLoop() {
         const elapsed = timestamp - lastTick;
         const tickDuration = 1000 / speed;
         
+        // ✅ ОБРАБАТЫВАЕМ ТОЛЬКО ОДИН ТИК ЗА КАДР
         if (elapsed >= tickDuration) {
-            const ticksToProcess = Math.min(Math.floor(elapsed / tickDuration), 5);
-            lastTick += ticksToProcess * tickDuration;
+            lastTick = timestamp;
             
-            for (let i = 0; i < ticksToProcess; i++) {
-                advanceDay();
-                autoSaveCounter++;
-                
-                if (autoSaveCounter >= 30) {
-                    autoSaveCounter = 0;
-                    autoSave();
-                }
-                
-                const dateElem = document.getElementById('game-date');
-                if (dateElem) dateElem.innerText = getDateString();
-                
+            advanceDay();
+            autoSaveCounter++;
+            
+            if (autoSaveCounter >= 30) {
+                autoSaveCounter = 0;
+                autoSave();
+            }
+            
+            document.getElementById('game-date').innerText = getDateString();
+            
+            // ВЫКЛЮЧАЕМ ТЯЖЁЛЫЕ СИСТЕМЫ НА БЫСТРЫХ СКОРОСТЯХ
+            updateResearch();
+            updateFocus();
+            
+            if (speed <= 3) {
+                processConstruction();
                 processSupply();
             }
             
-            updateResearch();
-            updateFocus();
-            processConstruction();
             processMovement();
             processCombat();
             
-            try {
-                updateEconomy(getTech().industry, { infantry: { maintenance: 0.2 }, tank: { maintenance: 1.5 } });
-            } catch(e) {}
+            if (speed <= 3) {
+                try {
+                    updateEconomy(getTech().industry, { infantry: { maintenance: 0.2 }, tank: { maintenance: 1.5 } });
+                } catch(e) {}
+                runAllAI();
+            }
             
-            runAllAI();
             updateTopBar();
-            updateOpenWindows();
             markDirty();
         }
+        
+        // ✅ РЕНДЕР КАРТЫ — НЕ КАЖДЫЙ ТИК
+        renderMap();
         
         gameLoopId = requestAnimationFrame(loop);
     }
