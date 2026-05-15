@@ -1,4 +1,4 @@
-// economy.js — СТРОИТЕЛЬСТВО ТОЛЬКО ДЛЯ ИГРОКА
+// economy.js — ПОЛНОСТЬЮ ИСПРАВЛЕННЫЙ
 
 import { 
     getPlayerResources, setPlayerResources,
@@ -7,9 +7,9 @@ import {
     getUnits, getTech
 } from './game.js';
 import { BUILDING_STATS } from './data.js';
-import { addNotification, calculateCountryStats } from './utils.js';
+import { addNotification } from './utils.js';
 
-// Начало стройки (ТОЛЬКО для игрока)
+// Начало стройки
 export function startBuilding(buildingType, posKey) {
     const stats = BUILDING_STATS[buildingType];
     if (!stats) return false;
@@ -27,11 +27,11 @@ export function startBuilding(buildingType, posKey) {
         return false;
     }
 
-    // Списание ресурсов
+    // ✅ Списание ресурсов
     resources.equipment -= stats.costEquipment;
     setPlayerResources(resources);
 
-    // ✅ Добавляем в очередь с владельцем-игроком
+    // ✅ Добавление в очередь
     const queue = getBuildingQueue();
     queue.push({
         pos: posKey,
@@ -41,121 +41,139 @@ export function startBuilding(buildingType, posKey) {
     });
     setBuildingQueue(queue);
 
-    addNotification(`Строительство ${stats.name} начато! (${stats.buildTime} дней)`, 'info');
+    addNotification(`🏗️ Строительство ${stats.name} начато! (${stats.buildTime} дней)`, 'info');
     
-    const buildIndicator = document.getElementById('build-indicator');
-    if (buildIndicator) buildIndicator.classList.remove('hidden');
+    // Показываем индикатор
+    const indicator = document.getElementById('build-indicator');
+    if (indicator) indicator.classList.remove('hidden');
     
     return true;
 }
 
-// Обработка строительства
+// Обработка очереди строительства
 export function processConstruction() {
     const queue = getBuildingQueue();
+    
     if (!queue || queue.length === 0) {
-        const buildIndicator = document.getElementById('build-indicator');
-        if (buildIndicator) buildIndicator.classList.add('hidden');
+        const indicator = document.getElementById('build-indicator');
+        if (indicator) indicator.classList.add('hidden');
         return;
     }
 
     const current = queue[0];
     
-    // Уменьшаем дни
+    // ✅ Уменьшаем счётчик дней
     current.daysLeft = (current.daysLeft || 0) - 1;
-
+    
+    // ✅ Проверка завершения
     if (current.daysLeft <= 0) {
-        const cellStats = getCellStats();
+        completeConstruction(current);
         
-        // ✅ Создаём клетку если её нет
-        if (!cellStats[current.pos]) {
-            cellStats[current.pos] = { 
-                population: Math.floor(Math.random() * 80000) + 5000, 
-                factories: 0, 
-                buildings: [] 
-            };
-        }
-
-        const cell = cellStats[current.pos];
-        
-        if (current.type === 'factory') {
-            cell.factories = (cell.factories || 0) + 1;
-            
-            // ✅ УВЕДОМЛЕНИЕ ТОЛЬКО ДЛЯ ИГРОКА
-            if (current.owner === getMyCountryId()) {
-                addNotification(`🏭 Военный завод построен! Всего в провинции: ${cell.factories}`, 'info');
-            }
-        } else if (current.type === 'port') {
-            if (!cell.buildings) cell.buildings = [];
-            cell.buildings.push('port');
-            
-            if (current.owner === getMyCountryId()) {
-                addNotification('⚓ Морской порт построен!', 'info');
-            }
-        }
-
-        // ✅ СОХРАНЯЕМ
-        cellStats[current.pos] = cell;
-        setCellStats(cellStats);
-
-        // Удаляем из очереди
+        // ✅ Удаляем из очереди
         queue.shift();
         setBuildingQueue(queue);
-
-        // Обновляем UI
-        if (current.owner === getMyCountryId()) {
-            import('./ui.js').then(m => m.updateTopBar());
-            import('./map.js').then(m => { m.markDirty(); m.renderMap(); });
-        }
-
-        // Скрываем индикатор если очередь пуста
+        
+        // ✅ Скрываем индикатор если очередь пуста
         if (queue.length === 0) {
-            const buildIndicator = document.getElementById('build-indicator');
-            if (buildIndicator) buildIndicator.classList.add('hidden');
+            const indicator = document.getElementById('build-indicator');
+            if (indicator) indicator.classList.add('hidden');
         }
     }
 }
 
-// Обновление экономики
+// ✅ Завершение постройки
+function completeConstruction(project) {
+    if (!project || !project.pos || !project.type) return;
+    
+    const cellStats = getCellStats();
+    const myId = getMyCountryId();
+    
+    // ✅ Создаём клетку если её нет
+    if (!cellStats[project.pos]) {
+        cellStats[project.pos] = {
+            population: Math.floor(Math.random() * 80000) + 5000,
+            factories: 0,
+            buildings: []
+        };
+    }
+    
+    const cell = cellStats[project.pos];
+    
+    // ✅ Применяем постройку
+    if (project.type === 'factory') {
+        cell.factories = (cell.factories || 0) + 1;
+        
+        if (project.owner === myId) {
+            addNotification(`🏭 Военный завод построен! Всего в провинции: ${cell.factories}`, 'info');
+        }
+    } else if (project.type === 'port') {
+        if (!cell.buildings) cell.buildings = [];
+        
+        // ✅ Проверяем что порта ещё нет
+        if (!cell.buildings.includes('port')) {
+            cell.buildings.push('port');
+            if (project.owner === myId) {
+                addNotification('⚓ Морской порт построен!', 'info');
+            }
+        }
+    }
+    
+    // ✅ СОХРАНЯЕМ ИЗМЕНЕНИЯ
+    cellStats[project.pos] = cell;
+    setCellStats(cellStats);
+    
+    // ✅ Обновляем интерфейс
+    if (project.owner === myId) {
+        import('./ui.js').then(m => m.updateTopBar());
+        import('./map.js').then(m => { m.markDirty(); m.renderMap(); });
+    }
+}
+
+// Обновление экономики игрока
 export function updateEconomy(techLevel, unitStats) {
     const resources = getPlayerResources();
     const myId = getMyCountryId();
     const gridData = getGridData();
     const cellStats = getCellStats();
 
-    // Считаем заводы игрока
+    // ✅ Считаем заводы на территории игрока
     let totalFactories = 0;
-    Object.entries(gridData).forEach(([pos, id]) => {
-        if (id === myId && cellStats[pos]) {
+    for (const [pos, owner] of Object.entries(gridData)) {
+        if (owner === myId && cellStats[pos]) {
             totalFactories += cellStats[pos].factories || 0;
         }
-    });
+    }
 
     resources.factories = totalFactories;
 
-    // Производство
+    // Производство снаряжения
     const industryBonus = 1 + ((techLevel || 1) - 1) * 0.05;
     const production = totalFactories * 1.5 * industryBonus;
 
-    // Обслуживание
+    // Обслуживание юнитов
     const units = getUnits() || [];
     let maintenance = 0;
-    units.forEach(u => {
+    for (const u of units) {
         if (u.owner === myId && (u.trainingDaysLeft || 0) <= 0) {
             const stats = unitStats[u.type];
-            if (stats) {
-                maintenance += stats.maintenance || 0;
-            }
+            if (stats) maintenance += stats.maintenance || 0;
         }
-    });
+    }
 
+    // Обновление ресурсов
     resources.equipment = Math.max(0, (resources.equipment || 0) + production - maintenance);
     setPlayerResources(resources);
 
-    // UI
-    const equipmentElem = document.getElementById('val-equipment');
+    // Обновление UI
+    updateTopBarUI(resources);
+}
+
+function updateTopBarUI(resources) {
     const factoriesElem = document.getElementById('val-factories');
-    if (equipmentElem) equipmentElem.innerText = Math.floor(resources.equipment || 0).toLocaleString();
+    const equipmentElem = document.getElementById('val-equipment');
+    
     if (factoriesElem) factoriesElem.innerText = resources.factories || 0;
+    if (equipmentElem) equipmentElem.innerText = Math.floor(resources.equipment || 0).toLocaleString();
 }
 
 export function getUnitProduction(factories, techLevel) {
